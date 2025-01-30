@@ -93,14 +93,19 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
+		boolean found = false;
 		for (int i = 0; i < allocatedList.getSize(); i++) {
             MemoryBlock block = allocatedList.getBlock(i);
             if (block.baseAddress == address) {
                 allocatedList.remove(i);
                 freeList.addLast(block);
+				found = true;
                 return;
             }
         }
+		if (!found) {
+			throw new IllegalArgumentException("index must be between 0 and size");
+		}
 	}
 	
 	/**
