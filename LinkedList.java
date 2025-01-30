@@ -272,7 +272,7 @@ public class LinkedList {
             current = current.next;
         }
 
-        throw new IllegalArgumentException(
+        throw new NullPointerException(
             "index must be between 0 and size"
         );
     }
