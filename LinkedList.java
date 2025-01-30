@@ -220,7 +220,7 @@ public class LinkedList {
                 "index must be between 0 and size-1"
             );
         }
-
+		
         if (index == 0) {
             first = first.next;
             size--;
@@ -272,7 +272,7 @@ public class LinkedList {
             current = current.next;
         }
 
-        throw new NullPointerException(
+        throw new IllegalArgumentException(
             "index must be between 0 and size"
         );
     }
