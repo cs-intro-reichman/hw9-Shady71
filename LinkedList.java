@@ -145,7 +145,7 @@ public class LinkedList {
 	public MemoryBlock getBlock(int index) {
 		if (index < 0 || index >= size) {
             throw new IllegalArgumentException(
-                "index must be between 0 and size-1"
+                "index must be between 0 and size"
             );
         }
         Node n = getNode(index);
@@ -273,7 +273,7 @@ public class LinkedList {
         }
 
         throw new IllegalArgumentException(
-            "The given block is not in this list."
+            "index must be between 0 and size"
         );
     }
 
