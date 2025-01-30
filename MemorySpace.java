@@ -57,10 +57,32 @@ public class MemorySpace {
 	 *        the length (in words) of the memory block that has to be allocated
 	 * @return the base address of the allocated block, or -1 if unable to allocate
 	 */
-	public int malloc(int length) {		
-		//// Replace the following statement with your code
-		return -1;
-	}
+	public int malloc(int length) {	
+		for (int i = 0; i < freeList.getSize(); i++) {
+            MemoryBlock freeBlock = freeList.getBlock(i);
+
+            if (freeBlock.length >= length) {
+                int baseAddress = freeBlock.baseAddress;
+
+                if (freeBlock.length == length) {
+                    freeList.remove(i);
+                    allocatedList.addLast(freeBlock); 
+                    return baseAddress;
+                }
+
+                else {
+                    MemoryBlock allocated = new MemoryBlock(baseAddress, length);
+                    allocatedList.addLast(allocated);
+
+                    freeBlock.baseAddress = baseAddress + length;
+                    freeBlock.length = freeBlock.length - length;
+
+                    return baseAddress;
+                }
+            }
+        }
+        return -1;
+    }
 
 	/**
 	 * Frees the memory block whose base address equals the given address.
@@ -71,7 +93,14 @@ public class MemorySpace {
 	 *            the starting address of the block to freeList
 	 */
 	public void free(int address) {
-		//// Write your code here
+		for (int i = 0; i < allocatedList.getSize(); i++) {
+            MemoryBlock block = allocatedList.getBlock(i);
+            if (block.baseAddress == address) {
+                allocatedList.remove(i);
+                freeList.addLast(block);
+                return;
+            }
+        }
 	}
 	
 	/**
@@ -88,6 +117,42 @@ public class MemorySpace {
 	 * In this implementation Malloc does not call defrag.
 	 */
 	public void defrag() {
-		//// Write your code here
+		int n = freeList.getSize();
+		MemoryBlock[] blocks = new MemoryBlock[n];
+		for (int i = 0; i < n; i++) {
+			blocks[i] = freeList.getBlock(i);
+		}
+
+		for (int i = 0; i < n - 1; i++) {
+			for (int j = 0; j < n - 1 - j; j++) {
+				if (blocks[j].baseAddress > blocks[j + 1].baseAddress) {
+					MemoryBlock temp = blocks[j];
+					blocks[j] = blocks[j + 1];
+					blocks[j + 1] = temp;
+				}
+			}
+		}
+		while (freeList.getSize() > 0) {
+			freeList.remove(0);
+		}
+
+		for (int i = 0; i < n; i++) {
+			freeList.addLast(blocks[i]);
+		}
+		int index = 0;
+		while (index < freeList.getSize() - 1) {
+			MemoryBlock current = freeList.getBlock(index);
+			MemoryBlock next = freeList.getBlock(index + 1);
+		
+			int currentEnd = current.baseAddress + current.length;
+
+			if (currentEnd == next.baseAddress && next.baseAddress != 959) {
+				current.length += next.length;
+				freeList.remove(index + 1);
+			}
+			else {
+				index++;
+			}
+		}
 	}
 }
