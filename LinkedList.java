@@ -221,12 +221,9 @@ public class LinkedList {
             );
         }
 		if (size == 0 || first == null) {
-			throw new NullPointerException("!");
+			throw new NullPointerException();
 		}
         if (index == 0) {
-			if (first == null) {
-				throw new NullPointerException();
-			}
             first = first.next;
             size--;
             if (size == 0) {
@@ -236,9 +233,6 @@ public class LinkedList {
         }
 
         Node prev = getNode(index - 1);
-		if (prev == null || prev.next == null) {
-			throw new NullPointerException();
-		}
         Node target = prev.next;
         prev.next = target.next;
         size--;
